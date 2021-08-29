@@ -1,0 +1,75 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-6">
+      <div class="box">
+          <form>
+              <div>
+                  <div>
+                      <input required class="form-control" type="text" name="name" placeholder="성함..">
+                  </div>
+                  <div>
+                      <input required class="form-control" type="email" name="email" placeholder="이메일..">
+                  </div>
+              </div>
+              
+              <div>
+                  <hr>
+                  <p>배송 정보:</p>
+                  <div>
+                      <input class="form-control" type="text" name="address" placeholder="주소..">
+                  </div>
+                  <div>
+                      <input class="form-control" type="text" name="city" placeholder="도시..">
+                  </div>
+                  <div>
+                      <input class="form-control" type="text" name="state" placeholder="도..">
+                  </div>
+                  <div>
+                      <input class="form-control" type="text" name="zipcode" placeholder="우편 번호..">
+                  </div>
+                  <div>
+                      <input class="form-control" type="text" name="country" placeholder="국가..">
+                  </div>
+              </div>
+
+              <hr>
+              <input class="btn btn-secondary disabled" type="submit" value="❗ 배송정보 제출하기">
+          </form>
+      </div>
+
+      <br>
+      <div class="box" id="payment-info">
+          <small>결제 버튼이 여기에 추가될 예정</small>
+          <button class="btn btn-secondary disabled" id="make-payment">💰 결제 하기</button>
+          <div id="paypal-button-container"></div>
+      </div>
+      
+  </div>
+
+  <div class="col-lg-6">
+      <div class="box">
+          <a class="btn btn-outline-secondary" href="{% url 'cart' %}">
+            <img width=20 src="{% static 'images\reply-shop.png' %}">장바구니로 돌아가기</a>
+          <hr>
+          <h3>주문 요약</h3>
+          <hr>
+          
+          <div class="장바구니줄">
+              <div style="flex:2"><img class="장바구니이미지" src="{% static 'images/Arch Logo Hoodie Navy.png' %}"></div>
+              <div style="flex:2"><strong>제품명~</strong></div>
+              <div style="flex:1"><strong>가격~</strong></div>
+              <div style="flex:1"><strong>x수량~</strong></div>
+          </div>
+          
+          <h5>제품 수:   x100</h5>
+          <h5>총합:   $??</h5>
+      </div>
+  </div>
+</div>
+
+
+{% endblock content %}

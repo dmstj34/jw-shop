@@ -1,0 +1,52 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block content %}
+<div class="row">    
+	<div class ="col-lig-12">
+    <div class= "box">
+      <a class="btn btn-outline-secondary" href="{% url 'store' %}">        
+        <img width=30 src="{% static 'images\reply-shop.png' %}">계속 쇼핑하기
+      </a>
+          
+      <table class="table">
+        <tr>
+          <th><h5>제품: <strong>11</strong></h5></th>
+          <th><h5>가격:<strong> 만딸라$</strong></h5></th>
+          <th><a style="float:right; margain:7px" class="btn btn-danger" href="{% url 'checkout' %}">결제하기</a></th>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <br>
+	<div class ="col-lig-12">
+    <div class= "box">
+      <div class="장바구니줄">
+        <div style="flex:2">그림?</div>
+        <div style="flex:2"><strong>제품</strong></div>
+        <div style="flex:1"><strong>가격</strong></div>
+        <div style="flex:1"><strong>수량</strong></div>
+        <div style="flex:1"><strong>총합</strong></div>
+      </div>
+
+      <div class="장바구니줄">
+        <div style="flex:2"><img class="장바구니이미지" src="{% static 'images/Arch Logo Hoodie Navy.png' %}"></div>
+        <div style="flex:2"><strong>제품명</strong></div>
+        <div style="flex:1"><strong>$??</strong></div>
+        <div style="flex:1"><strong><span class="개수">1개</span></strong>
+            <div class="수량">
+                <img class="수량버튼" src="{% static 'images/arrow-up.png' %}">
+                <img class="수량버튼" src="{% static 'images/arrow-down.png' %}">
+            </div>
+
+        </div>
+        <div style="flex:1"><strong>$###</strong></div>
+
+    </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+
