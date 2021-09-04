@@ -10,8 +10,8 @@
           
       <table class="table">
         <tr>
-          <th><h5>제품: <strong>11</strong></h5></th>
-          <th><h5>가격:<strong> 만딸라$</strong></h5></th>
+          <th><h5>제품: <strong>{{order.get_cart_items}}개</strong></h5></th>
+          <th><h5>가격:<strong>\{{order.get_cart_total}}</strong></h5></th>
           <th><a style="float:right; margain:7px" class="btn btn-danger" href="{% url 'checkout' %}">결제하기</a></th>
         </tr>
       </table>
@@ -22,27 +22,29 @@
 	<div class ="col-lig-12">
     <div class= "box">
       <div class="장바구니줄">
-        <div style="flex:2">그림?</div>
+        <div style="flex:2">이미지</div>
         <div style="flex:2"><strong>제품</strong></div>
         <div style="flex:1"><strong>가격</strong></div>
         <div style="flex:1"><strong>수량</strong></div>
         <div style="flex:1"><strong>총합</strong></div>
       </div>
 
-      <div class="장바구니줄">
-        <div style="flex:2"><img class="장바구니이미지" src="{% static 'images/Arch Logo Hoodie Navy.png' %}"></div>
-        <div style="flex:2"><strong>제품명</strong></div>
-        <div style="flex:1"><strong>$??</strong></div>
-        <div style="flex:1"><strong><span class="개수">1개</span></strong>
+      {% for item in items %}
+      <div class="장바구니줄"> 
+        <div style="flex:2"><img class="장바구니이미지" src="{{item.product.imageURL}}"></div>
+        <div style="flex:2"><strong>{{item.product.name}}</strong></div>
+        <div style="flex:1"><strong>${{item.priduct.price}}</strong></div>
+        <div style="flex:1"><strong><span class="개수">{{item.quantity}}개</span></strong>
             <div class="수량">
                 <img class="수량버튼" src="{% static 'images/arrow-up.png' %}">
                 <img class="수량버튼" src="{% static 'images/arrow-down.png' %}">
             </div>
 
         </div>
-        <div style="flex:1"><strong>$###</strong></div>
+        <div style="flex:1"><strong>${{item.get_total}}</strong></div>
 
-    </div>
+      </div>
+    {% endfor %}
     </div>
   </div>
 </div>
