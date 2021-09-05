@@ -33,11 +33,11 @@
       <div class="장바구니줄"> 
         <div style="flex:2"><img class="장바구니이미지" src="{{item.product.imageURL}}"></div>
         <div style="flex:2"><strong>{{item.product.name}}</strong></div>
-        <div style="flex:1"><strong>${{item.priduct.price}}</strong></div>
+        <div style="flex:1"><strong>${{item.product.price}}</strong></div>
         <div style="flex:1"><strong><span class="개수">{{item.quantity}}개</span></strong>
             <div class="수량">
-                <img class="수량버튼" src="{% static 'images/arrow-up.png' %}">
-                <img class="수량버튼" src="{% static 'images/arrow-down.png' %}">
+                <img data-product={{item.product.id}} data-action="add" class="수량버튼 장바구니업데이트" src="{% static 'images/arrow-up.png' %}">
+                <img data-product={{item.product.id}} data-action="sub" class="수량버튼 장바구니업데이트" src="{% static 'images/arrow-down.png' %}">
             </div>
 
         </div>

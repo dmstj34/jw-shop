@@ -5,9 +5,9 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-6">
-        <div class="box">
-            <form>
-                <div>
+        <div id="배송전체폼" class="box">
+            <form id="배송정보폼">
+                <div id="사용자정보">
                     <div>
                         <input required class="form-control" type="text" name="name" placeholder="성함..">
                     </div>
@@ -16,7 +16,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div id="배송정보">
                     <hr>
                     <p>배송 정보:</p>
                     <div>
@@ -37,14 +37,14 @@
                 </div>
 
                 <hr>
-                <input class="btn btn-secondary disabled" type="submit" value="❗ 배송정보 제출하기">
+                <input id="배송정보폼버튼" class="btn btn-secondary btn-block" type="submit" value="❗ 배송정보 제출하기">
             </form>
         </div>
 
         <br>
-        <div class="box" id="payment-info">
+        <div class="box 숨기기" id="payment-info">
             <small>결제 버튼이 여기에 추가될 예정</small>
-            <button class="btn btn-secondary disabled" id="make-payment">💰 결제 하기</button>
+            <button class="btn btn-secondary" id="make-payment">💰 결제 하기</button>
             <div id="paypal-button-container"></div>
         </div>
 
@@ -72,5 +72,75 @@
     </div>
 </div>
 
+<script type = "text/javascript">
+    var shipping = '{{order.shipping}}'   
+    var total = '{{order.get_cart_total}}' //총금액
 
+    if (shipping == 'False'){ //온라인 제품구매 시,
+        document.getElementById('배송정보').innerHTML = ''
+    }
+    if (user != 'AnonymousUser'){  //로그인시, 사용자입력정보 생략
+        document.getElementById('사용자정보').innerHTML = ''
+    }   
+    if (shipping == 'False' && user != 'AnonymousUser'){  //온라인제품구매+ 로그인 중일시, 배송전체 생략
+        document.getElementById('배송전체폼').classList.add('숨기기')
+        document.getElementById('payment-info').classList.remove('숨기기')
+    }    
+
+
+    var shipp_form = document.getElementById('배송정보폼') //배송정보 입력시, 정보창 생략
+    shipp_form.addEventListener('submit', function(e) {
+        e.preventDefault()
+        document.getElementById('배송정보폼버튼').classList.add('숨기기') //css이용
+        document.getElementById('payment-info').classList.remove('숨기기') //
+    })
+
+    document.getElementById('make-payment').addEventListener('click', function(e){ //결제누를시,
+        submitFormData()
+    })  
+    function submitFormData(){
+        alert('주문되었습니다.')
+        var userFormData = {
+            'name' :null,
+            'email' :null,
+            'total' : total,
+        }
+
+        var shippingInfo = {
+            'address' :null,
+            'city' :null,
+            'state' :null,
+            'zipcode' :null,
+        }
+        
+        if (shipping != 'False') { //온라인제품아니면
+            shippingInfo.address = shipp_form.address.value
+            shippingInfo.city = shipp_form.city.value
+            shippingInfo.state = shipp_form.state.value
+            shippingInfo.zipcode = shipp_form.zipcode.value
+        }
+        if (user == 'AnonymousUser'){ //미로그인시,  (user변수 베이스에서가져옴)
+            //로그인시는 이미 정보가 있으므로
+            userFormData.name = shipp_form.name.value
+            userFormData.email = shipp_form.email.value
+        }
+
+        var url ='/process_order/'
+        fetch(url, { //패치 이용 (정보 전송)
+            method: 'POST', //전송방식(업데이트)
+            headers: { //헤더 포함내용
+                'Content-Type':'application/json',
+                'X-CSRFToken': csrftoken //패치 해킹방지 (csrf토큰, base에서 가져옴)
+            },
+            body: JSON.stringify({'user_form': userFormData, 'shipping': shippingInfo}) //바디 내용
+        })
+        .then((response)=>{ //응답받으면 (데이터를 받음)
+            return response.json() 
+        })
+        .then((data)=>{ //받은 데이터 활용
+            alert('주문이 완료 되었습니다.')
+            window.location.href="{% url 'store' %}"
+        })
+    }
+</script>
 {% endblock content %}
