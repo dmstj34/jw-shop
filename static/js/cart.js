@@ -5,12 +5,35 @@ for(var i=0; i<updateBtns.length; i++){
     var action = this.dataset.action //data-action="add" 
 
     if(user == "AnonymousUser"){ //var user = "{{request.user}}" (base.html에서가져옴)
-      alert("로그인 후 이용바랍니다.")
+      //alert("로그인 후 이용바랍니다.")
+      //->로그인 안해도 쿠키이용해 장바구니 이용하게끔 변경
+      addCookieItem(productID, action)
     }
     else{
       updateUserOrder(productID, action)
     }
   })
+}
+
+function addCookieItem(productID, action) {
+  if (action == 'add'){
+    if (cart[productID] == undefined){
+      cart[productID] = {'quantity':1}
+    }
+    else {
+      cart[productID]['quantity'] += 1
+    }
+  }
+
+  if (action == 'sub'){
+    cart[productID]['quantity'] -= 1
+    if (cart[productID]['quantity'] <= 0){
+      delete cart[productID];
+    }        
+  }
+  
+  document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+  location.reload()
 }
 
 

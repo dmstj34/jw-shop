@@ -13,7 +13,7 @@
 
   <script type="text/javascript">
     var user = "{{request.user}}"
-    function getCookie(name) { //패치 해킹방지
+    function getToken(name) { //패치 해킹방지
       let cookieValue = null;
       if (document.cookie && document.cookie !== '') {
           const cookies = document.cookie.split(';');
@@ -28,7 +28,7 @@
       }
       return cookieValue;
   }
-  const csrftoken = getCookie('csrftoken');
+  const csrftoken = getToken('csrftoken');
   </script>
 
 </head>

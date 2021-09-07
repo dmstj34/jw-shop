@@ -2,52 +2,35 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import *
 import json, datetime
+from . cookie import *
 
 
 ####상점
 def store(request):
-  if request.user.is_authenticated:
-    customer = request.user.customer
-    order, created = Order.objects.get_or_create(customer=customer, complete=False) #주문가져오기
-    items = order.orderitem_set.all()
-    cartItems = order.get_cart_items
-  else:
-    items = []
-    order = {'get_cart_total':0, 'get_cart_items':0, 'shipping':False}
-    cartItems = order['get_cart_items']
+  Data = cart_data(request) # cookie.py > def cookie_cart
+  cartItems = Data['cartItems']
   
   products = Product.objects.all()
-  
+
   context={'products': products, 'cartItems': cartItems}
   return render(request, 'store/상점.html', context) #앱의 템플릿폴더를 자동인식하기때문에 경로이럼.
 
 ####장바구니
 def cart(request):
-  if request.user.is_authenticated:
-    customer = request.user.customer
-    order, created = Order.objects.get_or_create(customer=customer, complete=False) #주문가져오기
-    items = order.orderitem_set.all()
-    cartItems = order.get_cart_items
-  else:
-    items = []
-    order = {'get_cart_total':0, 'get_cart_items':0}
-    cartItems = order['get_cart_items']
+  Data = cart_data(request) # cookie.py > def cookie_cart
+  cartItems = Data['cartItems']
+  order = Data['order']
+  items = Data['items']
 
-  context = {'items': items, 'order':order, 'cartItems': cartItems, 'shipping':False }
+  context = {'items': items, 'order':order, 'cartItems': cartItems }
   return render(request, 'store/장바구니.html', context)
 
 ####결제
 def checkout(request):
-  if request.user.is_authenticated:
-    customer = request.user.customer
-    order, created = Order.objects.get_or_create(customer=customer, complete=False) #주문가져오기
-    items = order.orderitem_set.all()
-    cartItems = order.get_cart_items
-
-  else:
-    items = []
-    order = {'get_cart_total':0, 'get_cart_items':0, 'shipping':False} 
-    cartItems = order['get_cart_items']
+  Data = cart_data(request) # cookie.py > def cookie_cart
+  cartItems = Data['cartItems']
+  order = Data['order']
+  items = Data['items']
 
   context = {'items': items, 'order':order, 'cartItems': cartItems}
   return render(request, 'store/결제.html', context)
