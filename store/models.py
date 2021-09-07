@@ -3,9 +3,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Customer(models.Model):
-  user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+  user = models.OneToOneField(User,null=True, blank=True, on_delete=models.CASCADE)
   name = models.CharField(max_length=200, null=True)
-  email = models.CharField(max_length=200)  
+  email = models.CharField(max_length=200)
   def __str__(self):
     return self.name
 
@@ -17,7 +17,6 @@ class Product(models.Model):
   
   def __str__(self):
     return self.name
-
   @property
   def imageURL(self):
     try:
@@ -28,8 +27,8 @@ class Product(models.Model):
 
   
 class Order(models.Model):
-  customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
-  dated_ordered = models.DateTimeField(default=False, null=True, blank=True)
+  customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True )
+  dated_ordered =models.DateTimeField(auto_now_add=True) #에러수정
   complete = models.BooleanField(default=False, null=True, blank=True)
   transation_id = models.CharField(max_length=200, null=True)
   def __str__(self):
