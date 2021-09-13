@@ -4,7 +4,7 @@ for(var i=0; i<updateBtns.length; i++){
     var productID = this.dataset.product //data-product={{product.id}}
     var action = this.dataset.action //data-action="add" 
 
-    if(user == "AnonymousUser"){ //var user = "{{request.user}}" (base.html에서가져옴)
+    if(user == 'AnonymousUser'){//var user = "{{request.user}}" (base.html에서가져옴)
       //alert("로그인 후 이용바랍니다.")
       //->로그인 안해도 쿠키이용해 장바구니 이용하게끔 변경
       addCookieItem(productID, action)
