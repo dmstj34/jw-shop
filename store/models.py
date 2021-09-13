@@ -73,5 +73,5 @@ class ShippingAddress(models.Model):
   zipcode = models.CharField(max_length=200, null=True)
   dated_added = models.DateTimeField(auto_now_add=True)
   def __str__(self):
-    return self.address
+    return self.address+'/'+self.city+'/'+self.state+'/'+self.zipcode
 

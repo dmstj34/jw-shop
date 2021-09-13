@@ -44,7 +44,7 @@
         <br>
         <div class="box 숨기기" id="payment-info">
             <small>결제 버튼이 여기에 추가될 예정</small>
-            <button class="btn btn-secondary" id="make-payment">💰 결제 하기</button>
+            <button id="make-payment" class="btn btn-secondary">💰 결제 하기</button>
             <div id="paypal-button-container"></div>
         </div>
 
@@ -98,12 +98,12 @@
     document.getElementById('make-payment').addEventListener('click', function(e){ //결제누를시,
         submitFormData()
     })  
-    function submitFormData(){
+    function submitFormData() {
         alert('주문되었습니다.')
         var userFormData = {
             'name' :null,
             'email' :null,
-            'total' : int(total),
+            'total' : (total),
         }
 
         var shippingInfo = {
@@ -126,7 +126,7 @@
         }
 
         var url ='/process_order/'
-        fetch(url, { //패치 이용 (정보 전송)
+        fetch(url,{ //패치 이용 (정보 전송)
             method: 'POST', //전송방식(업데이트)
             headers: { //헤더 포함내용
                 'Content-Type':'application/json',
@@ -138,9 +138,12 @@
             return response.json() 
         })
         .then((data)=>{ //받은 데이터 활용
-            alert('주문이 완료 되었습니다.')
-            window.location.href="{% url 'store' %}"
+            alert('주문이 완료 되었습니다.');
+            cart = {} //장바구니 리셋
+            document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/" //쿠키 리셋
+            window.location.href= "{% url 'store' %}"
         })
+
     }
 </script>
 {% endblock content %}

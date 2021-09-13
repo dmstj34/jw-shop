@@ -43,3 +43,37 @@ def cart_data(request):
     order = CookieData['order']
     items = CookieData['items']
   return {'items':items, 'order':order, 'cartItems':cartItems}
+
+
+def client_order(request, data):
+  print('사용자가 로그인 안했어요..')  
+  print(data)
+  print('COOKIES:',request.COOKIES)
+
+  name = data['user_form']['name']
+  email = data['user_form']['email']
+  coocieData = cookie_cart(request)
+  items = coocieData['items']
+
+  #주문자 생성(계정생성은아님)
+  customer, created = Customer.objects.get_or_create(
+    email = email,
+  )
+  customer.name = name
+  customer.save()
+
+  #주문 생성
+  order = Order.objects.create(
+    customer = customer,
+    complete = False,
+  )
+  for item in items:
+    product = Product.objects.get(id=item['product']['id'])
+    orderItem = OrderItem.objects.create(
+      product = product,
+      order = order,
+      quantity = item['quantity'],
+    )
+
+  return customer, order
+

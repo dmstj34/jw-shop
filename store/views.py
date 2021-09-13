@@ -56,6 +56,8 @@ def updatedItme(request):
 
   return JsonResponse('Item added zz', safe=False)
 
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt #csrf 에러 방지
 
 
 def processOrder(request):
@@ -66,22 +68,23 @@ def processOrder(request):
     customer = request.user.customer
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
     
-    total = int(data['user_form']['total'])
-    order.transation_id = transation_id
+  else: #미사용자의 결제
+    customer, order = client_order(request, data)
 
-    if total == order.get_cart_total:
+  total = int(data['user_form']['total'])
+  order.transation_id = transation_id
+
+  if total == order.get_cart_total:
       order.complete = True
-    order.save()    
-  
-    if order.shipping == True: #온라인상품이 아닌경우.
+  order.save()
+  if order.shipping == True:
       ShippingAddress.objects.create(
-        customer = customer,
-        order = order,
-        address = data['shipping']['address'],
-        city = data['shipping']['city'],
-        state = data['shipping']['state'],
-        zipcode = data['shipping']['zipcode'],
-      ) 
-  else:
-    print('사용자 미로그인입니다.')    
+          customer = customer,
+          order = order,
+          address = data['shipping']['address'],
+          city = data['shipping']['city'],
+          state = data['shipping']['state'],
+          zipcode = data['shipping']['zipcode'],
+  )     
+
   return JsonResponse('Payment Completed!', safe =False) 
