@@ -115,3 +115,7 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images') #이미지업로드시 해당디렉토리에 자동생성
+
+
+LOGIN_REDIRECT_URL = "/" #로긴버튼 누르면 홈피로-
+LOGOUT_REDIRECT_URL = "/" #로긴버튼 누르면 홈피로-

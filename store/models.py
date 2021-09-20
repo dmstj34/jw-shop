@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Customer(models.Model):
   user = models.OneToOneField(User,null=True, blank=True, on_delete=models.CASCADE)
@@ -11,6 +13,7 @@ class Customer(models.Model):
 
 class Product(models.Model):
   name = models.CharField(max_length=200)
+  decription = models.CharField(max_length=200, null=True,default='')
   price = models.IntegerField(default=0)
   digital = models.BooleanField(default=False, null=True, blank=True)
   image = models.ImageField(null=True, blank=True)
@@ -75,3 +78,11 @@ class ShippingAddress(models.Model):
   def __str__(self):
     return self.address+'/'+self.city+'/'+self.state+'/'+self.zipcode
 
+
+@receiver(post_save, sender=User) #시그널 회원가입 저장
+def create_or_update_customer(sender, instance, created, **kwargs):
+  if created:
+    Customer.objects.create(user=instance)
+  instance.customer.save()
+
+  

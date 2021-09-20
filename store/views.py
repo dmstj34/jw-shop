@@ -3,7 +3,8 @@ from django.http import JsonResponse
 from .models import *
 import json, datetime
 from . cookie import *
-
+from django.views.generic import CreateView, DetailView
+from django.contrib.auth.forms import UserCreationForm
 
 ####상점
 def store(request):
@@ -88,3 +89,20 @@ def processOrder(request):
   )     
 
   return JsonResponse('Payment Completed!', safe =False) 
+
+
+class RegistrationView(CreateView):
+  template_name = "store/registration.html"
+  form_class = UserCreationForm
+  success_url = "/"
+
+
+class ProductDetailView(DetailView):
+  template_name = "store/product_detail.html"
+  queryset = Product.objects.all()
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    Data = cart_data(self.request)
+    cartItems = Data['cartItems']
+    context['cartItems'] = cartItems
+    return context #장바구니 개수 업데이트위해

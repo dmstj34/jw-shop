@@ -9,10 +9,10 @@
     <div class="box">
       <img src="{{product.imageURL}}" width="100%">
       <h5>{{ product.name }}</h5>
-      ~~내용~~내용~~내용~~내용~~내용~~내용~~내용~~내용~~내용~~내용~~내용~~내용~~내용~~내용
+        {{product.description}}
       <hr>
       <button data-product={{product.id}} data-action="add" class="btn btn-secondary 장바구니업데이트">장바구니 담기</button>
-      <a href="#" class="btn btn-secondary"> 상세보기</a>
+      <a href="product/{{product.pk}}" class="btn btn-secondary"> 상세보기</a>
       <h4 style="display: inline-block; float:right">\{{product.price}}</h4>
     </div>
   </div>
