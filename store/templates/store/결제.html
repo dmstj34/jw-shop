@@ -43,8 +43,7 @@
 
         <br>
         <div class="box 숨기기" id="payment-info">
-            <small>결제 버튼이 여기에 추가될 예정</small>
-            <button id="make-payment" class="btn btn-secondary">💰 결제 하기</button>
+            <!--<button id="make-payment" class="btn btn-secondary">💰 결제 하기</button>-->
             <div id="paypal-button-container"></div>
         </div>
 
@@ -72,6 +71,48 @@
     </div>
 </div>
 
+<script src="https://www.paypal.com/sdk/js?client-id=AbcOIE-B_thQ80lmYvDesXmjU9fM9jP4sq0Phg4uqNqdDz_kPGvTse4WB2pM9q62C0AKJb-z6UhESLtW&currency=USD"></script>
+<script>
+    var total = '{{order.get_cart_total}}' //총금액
+
+    // Render the PayPal button into #paypal-button-container
+    paypal.Buttons({
+        style: {
+            color:  'blue',
+            shape:  'pill',
+            label:  'pay',
+            height: 40
+        },
+        // Set up the transaction
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: parseInt(total)
+                    }
+                }]
+            });
+        },
+
+        // Finalize the transaction
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(orderData) {
+                // Successful capture! For demo purposes:
+                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                var transaction = orderData.purchase_units[0].payments.captures[0];
+                submitFormData()
+                // Replace the above to show a success message within this page, e.g.
+                // const element = document.getElementById('paypal-button-container');
+                // element.innerHTML = '';
+                // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                // Or go to another URL:  actions.redirect('thank_you.html');
+            });
+        }
+
+        // Render the PayPal button into #paypal-button-container
+    }).render('#paypal-button-container');
+</script>
+
 <script type = "text/javascript">
     var shipping = '{{order.shipping}}'   
     var total = '{{order.get_cart_total}}' //총금액
@@ -94,10 +135,11 @@
         document.getElementById('배송정보폼버튼').classList.add('숨기기') //css이용
         document.getElementById('payment-info').classList.remove('숨기기') //
     })
-
+    /*
     document.getElementById('make-payment').addEventListener('click', function(e){ //결제누를시,
         submitFormData()
-    })  
+    })*/  
+
     function submitFormData() {
         alert('주문되었습니다.')
         var userFormData = {
