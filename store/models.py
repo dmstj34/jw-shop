@@ -82,7 +82,7 @@ class ShippingAddress(models.Model):
 @receiver(post_save, sender=User) #시그널 회원가입 저장
 def create_or_update_customer(sender, instance, created, **kwargs):
   if created:
-    Customer.objects.create(user=instance)
+    Customer.objects.create(user=instance, name=instance.username, email=instance.email)
   instance.customer.save()
 
   
