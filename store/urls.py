@@ -22,5 +22,8 @@ urlpatterns = [
   path('logout/', auth_views.LogoutView.as_view(), name="logout"),
   path('product/<int:pk>/', views.ProductDetailView.as_view(), name="product_detail"),
   path('add-product/', views.ProductAddView.as_view(), name="add_product"),
+  path('product/<int:pk>/add_comment/', views.add_comment, name="add_comment"),
+  path('product/<int:pk>/remove_comment/', views.remove_comment, name="remove_comment"),
+  path('product/<int:pk>/modify_comment/', views.modify_comment, name="modify_comment"),
 
 ]

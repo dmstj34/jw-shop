@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from .models import *
 import json, datetime
@@ -7,6 +7,9 @@ from django.views.generic import CreateView, DetailView, TemplateView, View
 from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
 
 ####상점
 def store(request):
@@ -169,3 +172,42 @@ class ProductAddView(CreateView):
   form_class = ProductForm
   template_name = "store/add_product.html"
   success_url = "/"
+
+
+
+#댓글
+def add_comment(request, pk):
+  product = get_object_or_404(Product, pk=pk)
+  if request.method == "POST":
+    form = CommentForm(request.POST)
+    if form.is_valid():
+      comment=form.save(commit=False)
+      comment.author = request.user
+      comment.product = product
+      comment.save()
+      return redirect('product_detail', pk=product.pk)
+  else:
+    form = CommentForm()
+  return render(request, 'store/add_comment.html', {'form': form})
+
+
+@login_required
+def modify_comment(request, pk):
+  comment = get_object_or_404(Comment, pk=pk)
+  if request.method == "POST":
+    form = CommentForm(request.POST, instance=comment)
+    if form.is_valid():
+      comment = form.save()
+      comment.modify_date = timezone.now()
+      comment.save()
+      return redirect('product_detail', pk=comment.product.pk)
+  else:
+    form = CommentForm(instance=comment)
+  return render(request, 'store/add_comment.html', {'form': form})
+
+
+@login_required
+def remove_comment(request, pk):
+  comment = get_object_or_404(Comment, pk=pk)
+  comment.delete()
+  return redirect('product_detail', pk=comment.product.pk)

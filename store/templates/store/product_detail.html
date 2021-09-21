@@ -26,7 +26,37 @@
         </dl>  
         <hr>
           <button data-product={{product.id}} data-action="add" class="btn btn-success 장바구니업데이트">장바구니 담기</button>
-      </article> <!-- card-body.// -->
+        <hr>
+        {% for comment in product.comments.all %}
+          {% if user.is_authenticated or comment.approved_comment %}
+            <div class="comment">
+              <div class="editcomment">
+                {{comment.created_date}}
+                  {% if comment.modify_date %}
+                  [수정: {{comment.modify_date}}]
+                  {% endif %}
+
+                  {% if request.user == comment.author %}
+                  <a href="{% url 'modify_comment' pk=comment.pk  %}" class="small">수정</a>,
+                  <a href="{% url 'remove_comment' pk=comment.pk  %}" class="small">삭제</a>
+                  {% endif %}
+              </div>
+
+              <strong>{{comment.author}}</strong>
+              <p> {{comment.text|linebreaks}}</p>
+              <hr>
+            </div>
+          {% endif %}
+          {% empty %}
+          <p>댓글이 없습니다.</p>
+        {% endfor %}
+
+        {% if user.is_authenticated %}
+          <a class="btn btn-success" href="{% url 'add_comment' pk=product.pk %}">댓글작성</a>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-danger">로그인 후 댓글달기</a>
+        {% endif %}
+        </article> <!-- card-body.// -->
     </aside> <!-- col.// -->
   </div> <!-- row.// -->
 </div> <!-- card.// -->

@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 class Customer(models.Model):
   user = models.OneToOneField(User,null=True, blank=True, on_delete=models.CASCADE)
@@ -85,4 +86,15 @@ def create_or_update_customer(sender, instance, created, **kwargs):
     Customer.objects.create(user=instance, name=instance.username, email=instance.email)
   instance.customer.save()
 
-  
+
+
+#댓글
+class Comment(models.Model):
+  product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE )
+  author = models.ForeignKey(User, on_delete=models.CASCADE)
+  text = models.TextField()
+  created_date = models.DateTimeField(default=timezone.now)
+  modify_date = models.DateTimeField(null=True, blank=True)
+  approved_comment = models.BooleanField(default=True) #댓글승인
+  def __str__(self):
+    return self.text

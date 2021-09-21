@@ -38,3 +38,11 @@ body{
 .숨기기{
 	display: none;
 }
+
+
+.comment {
+	border-top:dotted 1px red;
+	font-size:0.9em;
+	margin: 20px 0px 20px 20px;
+	background-color: yellow;
+}

@@ -1,0 +1,10 @@
+{% extends 'store/base.html'%}
+{% load static %}
+{% block content %}
+    <h1>댓글 작성하기</h1>
+    <form method="POST" class="post-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-success">쓰기</button>
+    </form>
+{% endblock %}
